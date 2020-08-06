@@ -1,4 +1,7 @@
 ﻿public enum ComponentKey : short
 {
-    Position
+    Position,
+    Speed,
+    GameObject,
+    Transform
 }

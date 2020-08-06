@@ -7,11 +7,11 @@ namespace Dotity
     {
         #region Static Function
         private static List<IGroup> _groups = new List<IGroup>();
-        public IGroup GetGroup(IMatcher matcher)
+        public static IGroup CreateGroup(IMatcher matcher)
         {
             for (int i = 0, length = _groups.Count; i < length; i++)
             {
-                if (_groups[i].Equals(matcher)) return _groups[i];
+                if (_groups[i].Equal(matcher)) return _groups[i];
             }
             IGroup group = new Group(matcher);
             _groups.Add(group);
