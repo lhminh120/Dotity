@@ -8,13 +8,13 @@ namespace Dotity
         #region Static Function
         private static Stack<IEntity> _enitiesReuse = new Stack<IEntity>();
         public static List<IEntity> _entities = new List<IEntity>();
-        public static T Create<T>() where T : IEntity, new()
+        public static Entity CreateEntity()
         {
-            IEntity entity = _enitiesReuse.Count > 0 ? _enitiesReuse.Pop() : new T();
+            Entity entity = _enitiesReuse.Count > 0 ? (Entity)_enitiesReuse.Pop() : new Entity();
             entity.RegisteCallBackAddedComponent(Group.OnEntityAddComponent);
             entity.RegisteCallBackRemovedComponent(Group.OnEntityRemoveComponent);
             _entities.Add(entity);
-            return (T)entity;
+            return entity;
         }
         public static void AddToReuseList(IEntity entity)
         {

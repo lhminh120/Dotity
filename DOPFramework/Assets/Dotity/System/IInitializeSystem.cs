@@ -1,5 +1,8 @@
-﻿
-public interface IInitializeSystem
+﻿namespace Dotity
 {
-    void Initialize();
+    public interface IInitializeSystem : ISystem
+    {
+        void Initialize();
+    }
 }
+

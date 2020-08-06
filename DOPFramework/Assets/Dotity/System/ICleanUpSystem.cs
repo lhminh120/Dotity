@@ -1,5 +1,8 @@
-﻿
-public interface ICleanUpSystem
+﻿namespace Dotity
 {
-    void CleanUp();
+    public interface ICleanUpSystem : ISystem
+    {
+        void CleanUp();
+    }
 }
+
