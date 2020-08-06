@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+
 namespace Dotity
 {
     public class Component : IComponent
     {
         #region Static Function
         private static Dictionary<short, Stack<IComponent>> _listComponentsReuse = new Dictionary<short, Stack<IComponent>>();
+
         public static T Create<T>(short keyComponent) where T : new()
         {
             return (_listComponentsReuse.ContainsKey(keyComponent) && _listComponentsReuse[keyComponent].Count > 0) ? (T)_listComponentsReuse[keyComponent].Pop() : new T();
@@ -22,6 +25,14 @@ namespace Dotity
                 _listComponentsReuse.Add(componentKey, _tempStack);
             }
         }
+
+        
+        #endregion
+        #region Function
+        private bool _hasChange = false;
+        public bool IsChange() => _hasChange;
+        public void HasChange() => _hasChange = true;
+        public void FinishChange() => _hasChange = false;
         #endregion
     }
 }

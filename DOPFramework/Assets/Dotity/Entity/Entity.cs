@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Dotity
 {
@@ -10,17 +11,20 @@ namespace Dotity
         public static T Create<T>() where T : IEntity, new()
         {
             IEntity entity = _enitiesReuse.Count > 0 ? _enitiesReuse.Pop() : new T();
+            entity.RegisteCallBackAddedComponent(Group.OnEntityAddComponent);
+            entity.RegisteCallBackRemovedComponent(Group.OnEntityRemoveComponent);
             _entities.Add(entity);
             return (T)entity;
         }
-        public static void AddToReuseList(IEntity component)
+        public static void AddToReuseList(IEntity entity)
         {
-            _enitiesReuse.Push(component);
+            _enitiesReuse.Push(entity);
         }
         //Entity Is Not Really Destroyed, It's Just Added To Reuse List
         public static void DesTroyEntity(ref IEntity entity)
         {
             entity.RemoveAllComponents();
+            entity.RemoveAllCallBack();
             IEntity temp = entity;
             AddToReuseList(temp);
             entity = null;
@@ -30,10 +34,10 @@ namespace Dotity
         private Dictionary<short, IComponent> _components = new Dictionary<short, IComponent>();
         private bool _activeSelf = true;
 
-        public delegate void OnEntityComponetChange();
-        public event OnEntityComponetChange _onComponentAdded;
-        public event OnEntityComponetChange _onComponentRemoved;
-
+        
+        private Action<IEntity> _onComponentAdded;
+        private Action<IEntity> _onComponentRemoved;
+        
         public void SetActive(bool active) => _activeSelf = active;
         //Get Component By The Giving Key
         public IComponent GetComponent(ComponentKey componentKey)
@@ -59,6 +63,7 @@ namespace Dotity
             else
             {
                 _components.Add(key, component);
+                _onComponentAdded?.Invoke(this);
             }
         }
 
@@ -72,18 +77,20 @@ namespace Dotity
             {
                 Component.AddToReuseList(key, _components[key]);
                 _components.Remove(key);
+                _onComponentRemoved?.Invoke(this);
             }
             else
             {
                 DebugClass.Log("There is no componet suit with this key", DebugKey.Dotity);
             }
         }
-        public void RemoveComponent(short componentKey)
+        private void RemoveComponent(short componentKey)
         {
             if (_components.ContainsKey(componentKey))
             {
                 Component.AddToReuseList(componentKey, _components[componentKey]);
                 _components.Remove(componentKey);
+                _onComponentRemoved?.Invoke(this);
             }
             else
             {
@@ -110,6 +117,21 @@ namespace Dotity
             }
         }
 
+        public void RegisteCallBackAddedComponent(Action<IEntity> onEntityComponetAdded)
+        {
+            _onComponentAdded = onEntityComponetAdded;
+        }
+
+        public void RegisteCallBackRemovedComponent(Action<IEntity> onEntityComponetRemoved)
+        {
+            _onComponentRemoved = onEntityComponetRemoved;
+        }
+
+        public void RemoveAllCallBack()
+        {
+            _onComponentAdded = null;
+            _onComponentRemoved = null;
+        }
         #endregion
     }
 }

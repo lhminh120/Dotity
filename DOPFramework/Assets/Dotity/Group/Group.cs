@@ -17,13 +17,25 @@ namespace Dotity
             _groups.Add(group);
             return group;
         }
-        public void OnEntityRemoveComponent()
+        public static void OnEntityRemoveComponent(IEntity entity)
         {
-
+            for (int i = 0, length = _groups.Count; i < length; i++)
+            {
+                if (!_groups[i].Match(entity))
+                {
+                    _groups[i].Remove(entity);
+                }
+            }
         }
-        public void OnEntityAddComponent()
+        public static void OnEntityAddComponent(IEntity entity)
         {
-
+            for (int i = 0, length = _groups.Count; i < length; i++)
+            {
+                if (_groups[i].Match(entity))
+                {
+                    _groups[i].Add(entity);
+                }
+            }
         }
         #endregion
         #region Function
@@ -43,6 +55,21 @@ namespace Dotity
         public bool Equal(IMatcher matcher) => _matcher.Equal(matcher);
         public IMatcher GetMatcher() => _matcher;
         public List<IEntity> GetEntities() => _entities;
+        public bool Match(IEntity entity) => _matcher.Match(entity);
+
+        public bool Remove(IEntity entity) => _entities.Remove(entity);
+
+        public bool Add(IEntity entity)
+        {
+            if (!_entities.Contains(entity))
+            {
+                _entities.Add(entity);
+                return true;
+            }
+            return false;
+        }
+
+        public bool HasEntity(IEntity entity) => _entities.Contains(entity);
         #endregion
     }
 }
