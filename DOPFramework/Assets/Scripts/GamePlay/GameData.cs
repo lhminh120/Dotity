@@ -9,7 +9,7 @@ public class GameData : SingletonOneScene<GameData>
 
     public GameObject CreateObject()
     {
-        Vector3 pos = new Vector3(Random.Range(-10f, 10f), Random.Range(-5f, 5f), 0);
+        Vector3 pos = new Vector3(Random.Range(-10f, 10f), Random.Range(-3f, 3f), 0);
         return Instantiate(_object, pos, Quaternion.identity);
     }
 }
