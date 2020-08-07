@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     {
         InitSystem();
         _systemManager.Initialize();
+        //StartCoroutine(WaitForOneSecond());
     }
     private void Update()
     {
@@ -20,6 +21,15 @@ public class GameManager : MonoBehaviour
     {
         _systemManager.Add(new CreateViewSystem());
         _systemManager.Add(new MoveSystem());
+        _systemManager.Add(new RenderTransformSystem());
     }
-    
+    IEnumerator WaitForOneSecond()
+    {
+        while (true)
+        {
+            _systemManager.Excute();
+            _systemManager.CleanUp();
+            yield return new WaitForSeconds(1);
+        }
+    }
 }

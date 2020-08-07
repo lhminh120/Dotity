@@ -10,7 +10,7 @@ public enum DebugKey
 }
 public class DebugClass : MonoBehaviour
 {
-    private static bool _showAll = false;
+    private static bool _showAll = true;
     private static DebugKey _debugKeyLog = DebugKey.Default;
     private static DebugKey _debugKeyLogError = DebugKey.Default;
     private static DebugKey _debugKeyLogWarning = DebugKey.Default;

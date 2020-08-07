@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CreateViewSystem : IInitializeSystem
 {
-    private int numberEntities = 10000;
+    private int numberEntities = 2000;
     public void Initialize()
     {
         for (int i = 0; i < numberEntities; i++)
@@ -19,6 +19,6 @@ public class CreateViewSystem : IInitializeSystem
         entity.AddComponent(ComponentKey.GameObject, new GameObjectComponent(obj));
         entity.AddComponent(ComponentKey.Position, new PositionComponent(new Point3D(trans.position)));
         entity.AddComponent(ComponentKey.Transform, new TransformComponent(trans));
-        entity.AddComponent(ComponentKey.Position, new SpeedComponent(1));
+        entity.AddComponent(ComponentKey.Speed, new SpeedComponent(1));
     }
 }
