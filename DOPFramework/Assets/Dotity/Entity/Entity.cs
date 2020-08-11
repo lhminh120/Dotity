@@ -31,7 +31,7 @@ namespace Dotity
         }
         #endregion
         #region Function
-        private Dictionary<short, IComponent> _components = new Dictionary<short, IComponent>();
+        private Dictionary<int, IComponent> _components = new Dictionary<int, IComponent>();
         private bool _activeSelf = true;
 
         
@@ -42,7 +42,7 @@ namespace Dotity
         //Get Component By The Giving Key
         public IComponent GetComponent(ComponentKey componentKey)
         {
-            short key = (short)componentKey;
+            int key = (int)componentKey;
             if (_components.ContainsKey(key))
                 return _components[key];
             else
@@ -55,7 +55,7 @@ namespace Dotity
         //Add Component By The Giving Key
         public void AddComponent(ComponentKey componentKey, IComponent component)
         {
-            short key = (short)componentKey;
+            int key = (int)componentKey;
             if (_components.ContainsKey(key))
             {
                 DebugClass.Log("Already have this component", DebugKey.Dotity);
@@ -72,7 +72,7 @@ namespace Dotity
         //It's Just Pushed Into Stack Reuse And Save For Later
         public void RemoveComponent(ComponentKey componentKey)
         {
-            short key = (short)componentKey;
+            int key = (int)componentKey;
             if (_components.ContainsKey(key))
             {
                 Component.AddToReuseList(key, _components[key]);
@@ -84,7 +84,7 @@ namespace Dotity
                 DebugClass.Log("There is no componet suit with this key", DebugKey.Dotity);
             }
         }
-        private void RemoveComponent(short componentKey)
+        private void RemoveComponent(int componentKey)
         {
             if (_components.ContainsKey(componentKey))
             {

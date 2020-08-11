@@ -8,7 +8,8 @@ namespace Dotity
     {
         private List<IInitializeSystem> _initializeSystems = new List<IInitializeSystem>();
         private List<IExcuteSystem> _excuteSystems = new List<IExcuteSystem>();
-        private List<ICleanUpSystem> _cleanUpSystem = new List<ICleanUpSystem>();
+        private List<IRenderSystem> _renderSystems = new List<IRenderSystem>();
+        private List<ICleanUpSystem> _cleanUpSystems = new List<ICleanUpSystem>();
         public void Add(ISystem system)
         {
             IInitializeSystem initializeSystem = system as IInitializeSystem;
@@ -21,10 +22,15 @@ namespace Dotity
             {
                 _excuteSystems.Add(excuteSystem);
             }
+            IRenderSystem renderSystem = system as IRenderSystem;
+            if (renderSystem != null)
+            {
+                _renderSystems.Add(renderSystem);
+            }
             ICleanUpSystem cleanUpSystem = system as ICleanUpSystem;
             if (cleanUpSystem != null)
             {
-                _cleanUpSystem.Add(cleanUpSystem);
+                _cleanUpSystems.Add(cleanUpSystem);
             }
         }
         public void Initialize()
@@ -41,11 +47,18 @@ namespace Dotity
                 _excuteSystems[i].Excute();
             }
         }
+        public void Render()
+        {
+            for (int i = 0, length = _renderSystems.Count; i < length; i++)
+            {
+                _renderSystems[i].Render();
+            }
+        }
         public void CleanUp()
         {
-            for (int i = 0, length = _cleanUpSystem.Count; i < length; i++)
+            for (int i = 0, length = _cleanUpSystems.Count; i < length; i++)
             {
-                _cleanUpSystem[i].CleanUp();
+                _cleanUpSystems[i].CleanUp();
             }
         }
     }
