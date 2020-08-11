@@ -2,25 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveSystem : IExcuteSystem
+public class MoveSystem : JobSystem
 {
-    private IGroup _group;
-    public MoveSystem()
+    public MoveSystem() : base(8, Matcher.AnyOf(ComponentKey.Position)) { }
+
+    public override void JobExcute(IEntity entity)
     {
-        _group = Group.CreateGroup(Matcher.AnyOf(ComponentKey.Position));
+        Move(entity.GetComponent(ComponentKey.Position) as PositionComponent,
+                entity.GetComponent(ComponentKey.Speed) as SpeedComponent);
     }
-    public void Excute()
-    {
-        List<IEntity> entities = _group.GetEntities();
-        for (int i = 0, length = entities.Count; i < length; i++)
-        {
-            Move(entities[i].GetComponent(ComponentKey.Position) as PositionComponent,
-                entities[i].GetComponent(ComponentKey.Speed) as SpeedComponent);
-        }
-    }
+
     private void Move(PositionComponent position, SpeedComponent speed)
     {
-        position._position._y += speed._speed * Time.deltaTime;
+        position._position._y += speed._speed * GameManager._tick;// Time.deltaTime;
         if(position._position._y > 5)
         {
             position._position._y = -5;
