@@ -9,9 +9,5 @@ public class PositionComponent : Component
     {
         _position = position;
     }
-
-    public override ComponentKey GetComponentKey()
-    {
-        return ComponentKey.Position;
-    }
+    public override ComponentKey Key => ComponentKey.Position;
 }

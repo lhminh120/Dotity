@@ -33,7 +33,7 @@ namespace Dotity
         public bool IsChange() => _hasChange;
         public void HasChange() => _hasChange = true;
         public void FinishChange() => _hasChange = false;
-        public abstract ComponentKey GetComponentKey();
+        public abstract ComponentKey Key { get; }
         #endregion
     }
 }
