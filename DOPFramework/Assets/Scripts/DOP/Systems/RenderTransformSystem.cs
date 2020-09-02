@@ -10,9 +10,9 @@ public class RenderTransformSystem : RenderSystem
 
     public override void Render(IEntity entity)
     {
-        PositionComponent position = entity.GetComponent(ComponentKey.Position) as PositionComponent;
+        PositionComponent position = entity.GetComponent<PositionComponent>(ComponentKey.Position);
         if (!position.IsChange()) return;
-        TransformComponent transform = entity.GetComponent(ComponentKey.Transform) as TransformComponent;
+        TransformComponent transform = entity.GetComponent<TransformComponent>(ComponentKey.Transform);
         CheckNeedRender(position, transform);
         CleanUpRender(position);
     }

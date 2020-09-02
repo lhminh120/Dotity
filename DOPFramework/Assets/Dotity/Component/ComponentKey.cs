@@ -3,5 +3,6 @@
     Position = 0,
     Speed,
     GameObject,
-    Transform
+    Transform,
+    Sprite
 }

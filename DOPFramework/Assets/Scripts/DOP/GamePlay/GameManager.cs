@@ -22,9 +22,10 @@ public class GameManager : MonoBehaviour
     }
     private void InitSystem()
     {
-        _systemManager.Add(new CreateViewSystem());
-        _systemManager.Add(new MoveSystem());
-        _systemManager.Add(new RenderTransformSystem());
+        _systemManager
+            .Add(new CreateViewSystem())
+            .Add(new MoveSystem())
+            .Add(new RenderTransformSystem());
     }
     IEnumerator WaitForOneSecond()
     {

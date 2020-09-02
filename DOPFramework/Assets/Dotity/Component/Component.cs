@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace Dotity
 {
-    public class Component : IComponent
+    public abstract class Component : IComponent
     {
         #region Static Function
         private static Dictionary<int, Stack<IComponent>> _listComponentsReuse = new Dictionary<int, Stack<IComponent>>();
 
-        public static T Create<T>(short keyComponent) where T : new()
+        public static T Create<T>(int keyComponent) where T : new()
         {
-            return (_listComponentsReuse.ContainsKey(keyComponent) && _listComponentsReuse[keyComponent].Count > 0) ? (T)_listComponentsReuse[keyComponent].Pop() : new T();
+            return (_listComponentsReuse.TryGetValue(keyComponent, out Stack<IComponent> components) && components.Count > 0) ? (T)components.Pop() : new T();
         }
         public static void AddToReuseList(int componentKey, IComponent component)
         {
-            if (_listComponentsReuse.ContainsKey(componentKey))
+            if (_listComponentsReuse.TryGetValue(componentKey, out Stack<IComponent> components))
             {
-                _listComponentsReuse[componentKey].Push(component);
+                components.Push(component);
             }
             else
             {
@@ -33,6 +33,7 @@ namespace Dotity
         public bool IsChange() => _hasChange;
         public void HasChange() => _hasChange = true;
         public void FinishChange() => _hasChange = false;
+        public abstract ComponentKey GetComponentKey();
         #endregion
     }
 }
