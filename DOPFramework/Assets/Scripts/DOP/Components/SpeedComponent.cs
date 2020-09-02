@@ -8,9 +8,5 @@ public class SpeedComponent : Component
     {
         _speed = speed;
     }
-
-    public override ComponentKey GetComponentKey()
-    {
-        return ComponentKey.Speed;
-    }
+    public override ComponentKey Key => ComponentKey.Speed;
 }

@@ -46,7 +46,7 @@ namespace Dotity
             //int key = (int)componentKey;
             for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_components[i].GetComponentKey() == componentKey) return (T)_components[i];
+                if (_components[i].Key == componentKey) return (T)_components[i];
             }
             //if (_components.TryGetValue(key, out IComponent component))
             //{
@@ -60,7 +60,7 @@ namespace Dotity
             //int key = (int)componentKey;
             for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_components[i].GetComponentKey() == componentKey) return _components[i];
+                if (_components[i].Key == componentKey) return _components[i];
             }
             //if (_components.TryGetValue(key, out IComponent component))
             //{
@@ -77,7 +77,7 @@ namespace Dotity
             //int key = (int)componentKey;
             for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_components[i].GetComponentKey() == component.GetComponentKey())
+                if (_components[i].Key == component.Key)
                 {
                     DebugClass.Log("Already have this component", DebugKey.Dotity);
                     return this;
@@ -105,7 +105,7 @@ namespace Dotity
             //int key = (int)componentKey;
             for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_components[i].GetComponentKey() == componentKey)
+                if (_components[i].Key == componentKey)
                 {
                     Component.AddToReuseList((int)componentKey, _components[i]);
                     _components.RemoveAt(i);
@@ -129,7 +129,7 @@ namespace Dotity
         {
             for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_components[i].GetComponentKey() == (ComponentKey)componentKey)
+                if (_components[i].Key == (ComponentKey)componentKey)
                 {
                     Component.AddToReuseList(componentKey, _components[i]);
                     _components.RemoveAt(i);
@@ -154,7 +154,7 @@ namespace Dotity
         {
             for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_components[i].GetComponentKey() == componentKey) return true;
+                if (_components[i].Key == componentKey) return true;
             }
             return false;
         }
@@ -173,7 +173,7 @@ namespace Dotity
         {
             for (int i = _components.Count; i >= 0; i++)
             {
-                Component.AddToReuseList((int)_components[i].GetComponentKey(), _components[i]);
+                Component.AddToReuseList((int)_components[i].Key, _components[i]);
                 _components.RemoveAt(i);
                 _onComponentRemoved?.Invoke(this);
                 //return;

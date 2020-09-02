@@ -5,7 +5,7 @@
         bool IsChange();
         void HasChange();
         void FinishChange();
-        ComponentKey GetComponentKey();
+        ComponentKey Key { get; }
     }
 }
 
