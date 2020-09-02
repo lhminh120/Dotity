@@ -9,4 +9,9 @@ public class GameObjectComponent : Dotity.Component
     {
         _obj = obj;
     }
+
+    public override ComponentKey GetComponentKey()
+    {
+        return ComponentKey.GameObject;
+    }
 }

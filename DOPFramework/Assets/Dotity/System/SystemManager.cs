@@ -10,7 +10,7 @@ namespace Dotity
         private List<IExcuteSystem> _excuteSystems = new List<IExcuteSystem>();
         private List<IRenderSystem> _renderSystems = new List<IRenderSystem>();
         private List<ICleanUpSystem> _cleanUpSystems = new List<ICleanUpSystem>();
-        public void Add(ISystem system)
+        public SystemManager Add(ISystem system)
         {
             IInitializeSystem initializeSystem = system as IInitializeSystem;
             if (initializeSystem != null)
@@ -32,6 +32,7 @@ namespace Dotity
             {
                 _cleanUpSystems.Add(cleanUpSystem);
             }
+            return this;
         }
         public void Initialize()
         {

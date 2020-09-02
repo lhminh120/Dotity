@@ -9,4 +9,9 @@ public class TransformComponent : Dotity.Component
     {
         _transform = transform;
     }
+
+    public override ComponentKey GetComponentKey()
+    {
+        return ComponentKey.Transform;
+    }
 }

@@ -8,8 +8,8 @@ public class MoveSystem : JobSystem
 
     public override void JobExcute(IEntity entity)
     {
-        Move(entity.GetComponent(ComponentKey.Position) as PositionComponent,
-                entity.GetComponent(ComponentKey.Speed) as SpeedComponent);
+        Move(entity.GetComponent<PositionComponent>(ComponentKey.Position),
+                entity.GetComponent<SpeedComponent>(ComponentKey.Speed));
     }
 
     private void Move(PositionComponent position, SpeedComponent speed)
