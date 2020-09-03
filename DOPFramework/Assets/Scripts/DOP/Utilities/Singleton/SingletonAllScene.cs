@@ -32,6 +32,7 @@ public abstract class SingletonAllScene<T> : MonoBehaviour where T : UnityEngine
                     GameObject obj = new GameObject();
                     obj.name = typeof(T).Name;
                     instance = obj.AddComponent<T>();
+                    DontDestroyOnLoad(obj);
                 }
             }
             return instance;
@@ -54,13 +55,21 @@ public abstract class SingletonAllScene<T> : MonoBehaviour where T : UnityEngine
         }
         else
         {
-            Destroy(gameObject);
+            if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                DontDestroyOnLoad(gameObject);
+            }
+
         }
     }
 
     public virtual void OnApplicationQuit()
     {
-        if(instance != null)
+        if (instance != null)
         {
             instance = null;
         }

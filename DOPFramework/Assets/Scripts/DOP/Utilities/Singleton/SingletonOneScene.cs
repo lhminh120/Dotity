@@ -27,12 +27,12 @@ public abstract class SingletonOneScene<T> : MonoBehaviour where T : UnityEngine
             if (instance == null)
             {
                 instance = FindObjectOfType<T>();
-                if (instance == null)
-                {
-                    GameObject obj = new GameObject();
-                    obj.name = typeof(T).Name;
-                    instance = obj.AddComponent<T>();
-                }
+                //if (instance == null)
+                //{
+                //    GameObject obj = new GameObject();
+                //    obj.name = typeof(T).Name;
+                //    instance = obj.AddComponent<T>();
+                //}
             }
             return instance;
         }
@@ -46,7 +46,7 @@ public abstract class SingletonOneScene<T> : MonoBehaviour where T : UnityEngine
 
     public virtual void OnApplicationQuit()
     {
-        if(instance != null)
+        if (instance != null)
         {
             instance = null;
         }

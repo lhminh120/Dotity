@@ -1,5 +1,8 @@
-﻿using Dotity;
-public interface IRenderSystem : ISystem
+﻿namespace Dotity
 {
-    void Render();
+    public interface IRenderSystem : ISystem
+    {
+        void Render();
+    }
 }
+

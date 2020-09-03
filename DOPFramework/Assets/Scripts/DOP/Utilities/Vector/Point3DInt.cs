@@ -246,6 +246,13 @@ public class Point3DInt
     //    }
     //}
     #endregion
-
+    #region Clone
+    public Point3DInt Clone()
+    {
+        return new Point3DInt(_x, _y, _z);
+    }
+    #endregion
 }
+
+
 

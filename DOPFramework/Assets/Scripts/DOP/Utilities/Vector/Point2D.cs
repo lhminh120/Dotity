@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Point2D : Point3D
 {
+    //public float _x;
+    //public float _y;
     #region Contructor
     public Point2D(float x, float y)
     {

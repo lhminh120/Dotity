@@ -1,13 +1,12 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 namespace Dotity
 {
     public abstract class JobSystem : IExcuteSystem
     {
         protected IGroup _group;
-        private int _numberThread;
+        private readonly int _numberThread;
         public JobSystem(int numberThread, IMatcher matcher)
         {
             _group = Group.CreateGroup(matcher);
