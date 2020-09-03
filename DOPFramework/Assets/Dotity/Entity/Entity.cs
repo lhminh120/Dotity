@@ -6,7 +6,7 @@ namespace Dotity
     public class Entity : IEntity
     {
         #region Static Function
-        private static Stack<IEntity> _enitiesReuse = new Stack<IEntity>();
+        private static readonly Stack<IEntity> _enitiesReuse = new Stack<IEntity>();
         public static List<IEntity> _entities = new List<IEntity>();
         public static Entity CreateEntity()
         {
@@ -32,7 +32,7 @@ namespace Dotity
         #endregion
         #region Function
         //private Dictionary<int, IComponent> _components = new Dictionary<int, IComponent>();
-        private List<IComponent> _components = new List<IComponent>();
+        private readonly List<IComponent> _components = new List<IComponent>();
         private bool _activeSelf = true;
 
 

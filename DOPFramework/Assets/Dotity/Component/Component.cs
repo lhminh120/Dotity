@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 
 namespace Dotity
@@ -6,7 +6,7 @@ namespace Dotity
     public abstract class Component : IComponent
     {
         #region Static Function
-        private static Dictionary<int, Stack<IComponent>> _listComponentsReuse = new Dictionary<int, Stack<IComponent>>();
+        private static readonly Dictionary<int, Stack<IComponent>> _listComponentsReuse = new Dictionary<int, Stack<IComponent>>();
 
         public static T Create<T>(int keyComponent) where T : new()
         {
@@ -26,12 +26,15 @@ namespace Dotity
             }
         }
 
-        
+
         #endregion
         #region Function
         private bool _hasChange = false;
         public bool IsChange() => _hasChange;
-        public void HasChange() => _hasChange = true;
+        public void HasChange() 
+        {
+            if (!_hasChange) _hasChange = true;
+        }
         public void FinishChange() => _hasChange = false;
         public abstract ComponentKey Key { get; }
         #endregion

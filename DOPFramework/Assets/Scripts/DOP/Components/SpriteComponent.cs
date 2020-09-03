@@ -3,5 +3,6 @@ using Dotity;
 
 public class SpriteComponent : Component
 {
-    public override ComponentKey Key => ComponentKey.Sprite;
+    private ComponentKey _key = ComponentKey.Sprite;
+    public override ComponentKey Key => _key;
 }

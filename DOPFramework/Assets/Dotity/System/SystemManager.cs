@@ -6,10 +6,10 @@ namespace Dotity
 {
     public class SystemManager
     {
-        private List<IInitializeSystem> _initializeSystems = new List<IInitializeSystem>();
-        private List<IExcuteSystem> _excuteSystems = new List<IExcuteSystem>();
-        private List<IRenderSystem> _renderSystems = new List<IRenderSystem>();
-        private List<ICleanUpSystem> _cleanUpSystems = new List<ICleanUpSystem>();
+        private readonly List<IInitializeSystem> _initializeSystems = new List<IInitializeSystem>();
+        private readonly List<IExcuteSystem> _excuteSystems = new List<IExcuteSystem>();
+        private readonly List<IRenderSystem> _renderSystems = new List<IRenderSystem>();
+        private readonly List<ICleanUpSystem> _cleanUpSystems = new List<ICleanUpSystem>();
         public SystemManager Add(ISystem system)
         {
             IInitializeSystem initializeSystem = system as IInitializeSystem;
@@ -34,6 +34,7 @@ namespace Dotity
             }
             return this;
         }
+
         public void Initialize()
         {
             for (int i = 0, length = _initializeSystems.Count; i < length; i++)

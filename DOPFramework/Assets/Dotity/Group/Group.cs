@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace Dotity
 {
     public class Group : IGroup
     {
         #region Static Function
-        private static List<IGroup> _groups = new List<IGroup>();
+        private static readonly List<IGroup> _groups = new List<IGroup>();
         public static IGroup CreateGroup(IMatcher matcher)
         {
             for (int i = 0, length = _groups.Count; i < length; i++)
@@ -39,8 +38,8 @@ namespace Dotity
         }
         #endregion
         #region Function
-        private IMatcher _matcher;
-        private List<IEntity> _entities = new List<IEntity>();
+        private readonly IMatcher _matcher;
+        private readonly List<IEntity> _entities = new List<IEntity>();
         public Group(IMatcher matcher)
         {
             _matcher = matcher;

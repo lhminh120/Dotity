@@ -12,29 +12,30 @@ public class Point3D
     public static Point3D Zero { get { return new Point3D(); } }
     public static Point3D One { get { return new Point3D(1, 1, 1); } }
     public static Point3D Up { get { return new Point3D(1, 1, 1); } }
+
     public bool CheckZero()
     {
         return (_x == 0 && _y == 0 && _z == 0);
     }
     #region Contructor
-    public Point3D(float x, float y, float z)
+    public Point3D(float x = 0, float y = 0, float z = 0)
     {
         _x = x;
         _y = y;
         _z = z;
     }
-    public Point3D(float x, float y)
-    {
-        _x = x;
-        _y = y;
-        _z = 0;
-    }
-    public Point3D()
-    {
-        _x = 0;
-        _y = 0;
-        _z = 0;
-    }
+    //public Point3D(float x, float y)
+    //{
+    //    _x = x;
+    //    _y = y;
+    //    _z = 0;
+    //}
+    //public Point3D()
+    //{
+    //    _x = 0;
+    //    _y = 0;
+    //    _z = 0;
+    //}
     public Point3D(Vector3 vec)
     {
         _x = vec.x;
@@ -49,29 +50,29 @@ public class Point3D
     }
     #endregion
     #region Set Value
-    public virtual void Set(float x, float y, float z)
+    public void Set(float x, float y, float z)
     {
         _x = x;
         _y = y;
         _z = z;
     }
-    public virtual void Set(float x, float y)
+    public void Set(float x, float y)
     {
         _x = x;
         _y = y;
     }
-    public virtual void Set(Vector3 vec3)
+    public void Set(Vector3 vec3)
     {
         _x = vec3.x;
         _y = vec3.y;
         _z = vec3.z;
     }
-    public virtual void Set(Vector2 vec2)
+    public void Set(Vector2 vec2)
     {
         _x = vec2.x;
         _y = vec2.y;
     }
-    public virtual void Set(Point3D point3D)
+    public void Set(Point3D point3D)
     {
         _x = point3D._x;
         _y = point3D._y;
@@ -148,17 +149,18 @@ public class Point3D
     #region Translate
     public void Translate(Point3D b, float speed)
     {
-        double length = Math.Sqrt(b._x * b._x + b._y * b._y + b._z * b._z);
+        Point3D temp = b.Clone();
+        double length = Math.Sqrt(temp._x * temp._x + temp._y * temp._y + temp._z * temp._z);
         if (length > 0)
         {
             float tempValue = 1 / (float)length;
-            b._x *= tempValue;
-            b._y *= tempValue;
-            b._z *= tempValue;
+            temp._x *= tempValue;
+            temp._y *= tempValue;
+            temp._z *= tempValue;
         }
-        _x += b._x * speed;
-        _y += b._y * speed;
-        _z += b._z * speed;
+        _x += temp._x * speed;
+        _y += temp._y * speed;
+        _z += temp._z * speed;
     }
     #endregion
     #region Distance
@@ -204,40 +206,44 @@ public class Point3D
     #region Operator
     public static Point3D operator *(Point3D a, float b)
     {
-        a._x *= b;
-        a._y *= b;
-        a._z *= b;
-        return a;
+        Point3D temp = a.Clone();
+        temp._x *= b;
+        temp._y *= b;
+        temp._z *= b;
+        return temp;
     }
     public static Point3D operator /(Point3D a, float b)
     {
+        Point3D temp = a.Clone();
         float tempValue = 1 / b;
-        a._x *= tempValue;
-        a._y *= tempValue;
-        a._z *= tempValue;
-        return a;
+        temp._x *= tempValue;
+        temp._y *= tempValue;
+        temp._z *= tempValue;
+        return temp;
     }
     public static Point3D operator +(Point3D a, Point3D b)
     {
-        a._x += b._x;
-        a._y += b._y;
-        a._z += b._z;
-        return a;
+        Point3D temp = a.Clone();
+        temp._x += b._x;
+        temp._y += b._y;
+        temp._z += b._z;
+        return temp;
         //return new Point3D(a._x + b._x, a._y + b._y, a._z + b._z);
     }
-       
+
 
     public static Point3D operator -(Point3D a, Point3D b)
     {
-        a._x -= b._x;
-        a._y -= b._y;
-        a._z -= b._z;
-        return a;
+        Point3D temp = a.Clone();
+        temp._x -= b._x;
+        temp._y -= b._y;
+        temp._z -= b._z;
+        return temp;
         //return new Point3D(a._x - b._x, a._y - b._y, a._z - b._z);
     }
     public static bool operator ==(Point3D a, Point3D b)
     {
-        if(a._x == b._x && a._y == b._y && a._z == b._z)
+        if (a._x == b._x && a._y == b._y && a._z == b._z)
         {
             return true;
         }
@@ -258,5 +264,11 @@ public class Point3D
         }
     }
     #endregion
-
+    #region Clone
+    public Point3D Clone()
+    {
+        return new Point3D(_x, _y, _z);
+    }
+    #endregion
 }
+

@@ -6,7 +6,7 @@ using UnityEngine;
 public class RenderTransformSystem : RenderSystem
 {
     private Vector3 _vec = new Vector3();
-    public RenderTransformSystem() : base(Matcher.AnyOf(ComponentKey.Position, ComponentKey.Transform)) { }
+    public RenderTransformSystem() : base(new Matcher().AnyOf(ComponentKey.Position, ComponentKey.Transform)) { }
 
     public override void Render(IEntity entity)
     {
