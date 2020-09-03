@@ -21,7 +21,11 @@ namespace Dotity
             {
                 for (int i = 0; i < count; i++)
                 {
-                    JobExcute(entities[i]);
+                    if (JobExcuteCondition(entities[i]))
+                    {
+                        JobExcute(entities[i]);
+                    }
+                       
                 }
                 return;
             }
@@ -75,10 +79,15 @@ namespace Dotity
             {
                 //if(i < 0 || i >= entities.Count)
                 //    DebugClass.Log("count " + entities.Count + " i " + i);
-                JobExcute(entities[i]);
+                if (JobExcuteCondition(entities[i]))
+                {
+                    JobExcute(entities[i]);
+                }
+                
             }
         }
         public abstract void JobExcute(IEntity entity);
+        public abstract bool JobExcuteCondition(IEntity entity);
     }
 }
 

@@ -6,12 +6,18 @@ namespace Dotity
 {
     public class SystemManager
     {
+        private readonly List<IServiceSystem> _serviceSystems = new List<IServiceSystem>();
         private readonly List<IInitializeSystem> _initializeSystems = new List<IInitializeSystem>();
         private readonly List<IExcuteSystem> _excuteSystems = new List<IExcuteSystem>();
         private readonly List<IRenderSystem> _renderSystems = new List<IRenderSystem>();
         private readonly List<ICleanUpSystem> _cleanUpSystems = new List<ICleanUpSystem>();
         public SystemManager Add(ISystem system)
         {
+            IServiceSystem serviceSystem = system as IServiceSystem;
+            if (serviceSystem != null)
+            {
+                _serviceSystems.Add(serviceSystem);
+            }
             IInitializeSystem initializeSystem = system as IInitializeSystem;
             if (initializeSystem != null)
             {
@@ -34,7 +40,13 @@ namespace Dotity
             }
             return this;
         }
-
+        public void ServiceExcute()
+        {
+            for (int i = 0, length = _serviceSystems.Count; i < length; i++)
+            {
+                _serviceSystems[i].ServiceExcute();
+            }
+        }
         public void Initialize()
         {
             for (int i = 0, length = _initializeSystems.Count; i < length; i++)

@@ -1,11 +1,11 @@
 ﻿
-using Dotity;
+using UnityEngine;
 
-public class PositionComponent : Component
+public class PositionComponent : Dotity.Component
 {
-    public Point3D _position;
+    public Vector3 _position;
     private ComponentKey _key = ComponentKey.Position;
-    public PositionComponent(Point3D position)
+    public PositionComponent(Vector3 position)
     {
         _position = position;
     }

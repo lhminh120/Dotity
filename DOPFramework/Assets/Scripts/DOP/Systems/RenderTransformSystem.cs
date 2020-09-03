@@ -1,28 +1,26 @@
 ﻿
 using Dotity;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class RenderTransformSystem : RenderSystem
 {
-    private Vector3 _vec = new Vector3();
     public RenderTransformSystem() : base(new Matcher().AnyOf(ComponentKey.Position, ComponentKey.Transform)) { }
 
     public override void Render(IEntity entity)
     {
         PositionComponent position = entity.GetComponent<PositionComponent>(ComponentKey.Position);
-        if (!position.IsChange()) return;
         TransformComponent transform = entity.GetComponent<TransformComponent>(ComponentKey.Transform);
-        CheckNeedRender(position, transform);
-        CleanUpRender(position);
+        RenderTransform(position, transform);
     }
-    private void CheckNeedRender(PositionComponent position, TransformComponent transform)
+
+    public override bool RenderCondition(IEntity entity)
     {
-        _vec.Set(position._position._x, position._position._y, position._position._z);
-        transform._transform.position = _vec;
+        return entity.GetComponent<PositionComponent>(ComponentKey.Position).IsChange();
     }
-    private void CleanUpRender(PositionComponent position)
+
+    private void RenderTransform(PositionComponent position, TransformComponent transform)
     {
+        //_vec.Set(position._position._x, position._position._y, position._position._z);
+        transform._transform.position = position._position;
         position.FinishChange();
     }
 }
