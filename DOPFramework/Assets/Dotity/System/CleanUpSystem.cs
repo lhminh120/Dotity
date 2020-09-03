@@ -14,10 +14,15 @@ namespace Dotity
             List<IEntity> entities = _group.GetEntities();
             for (int i = 0, length = entities.Count; i < length; i++)
             {
-                CleanUp(entities[i]);
+                if (CleanUpCondition(entities[i]))
+                {
+                    CleanUp(entities[i]);
+                }
+                
             }
         }
         public abstract void CleanUp(IEntity entity);
+        public abstract bool CleanUpCondition(IEntity entity);
     }
 }
 

@@ -28,7 +28,7 @@ public class CreateViewSystem : IInitializeSystem
 
         Entity.CreateEntity()
             .AddComponent(new GameObjectComponent(obj))
-            .AddComponent(new PositionComponent(new Point3D(trans.position)))
+            .AddComponent(new PositionComponent(trans.position))
             .AddComponent(new TransformComponent(trans))
             .AddComponent(new SpeedComponent(1));
     }

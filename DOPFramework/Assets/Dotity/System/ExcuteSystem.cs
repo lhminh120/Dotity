@@ -14,10 +14,15 @@ namespace Dotity
             List<IEntity> entities = _group.GetEntities();
             for (int i = 0, length = entities.Count; i < length; i++)
             {
-                Excute(entities[i]);
+                if (ExcuteCondition(entities[i]))
+                {
+                    Excute(entities[i]);
+                }
+               
             }
         }
         public abstract void Excute(IEntity entity);
+        public abstract bool ExcuteCondition(IEntity entity);
     }
 }
 

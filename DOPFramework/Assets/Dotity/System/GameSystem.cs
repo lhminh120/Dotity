@@ -14,6 +14,7 @@ namespace Dotity
         private void Update()
         {
             _tick = Time.deltaTime;
+            _systemManager.ServiceExcute();
             _systemManager.Excute();
             _systemManager.Render();
             _systemManager.CleanUp();

@@ -32,12 +32,17 @@ public class MoveSystem : ExcuteSystem
 
     }
 
+    public override bool ExcuteCondition(IEntity entity)
+    {
+        return true;
+    }
+
     private void Move(PositionComponent position, SpeedComponent speed)
     {
-        position._position._y += speed._speed * GameSystem._tick;// Time.deltaTime;
-        if (position._position._y > 5)
+        position._position.y += speed._speed * GameSystem._tick;// Time.deltaTime;
+        if (position._position.y > 5)
         {
-            position._position._y = -5;
+            position._position.y = -5;
         }
         position.HasChange();
     }
