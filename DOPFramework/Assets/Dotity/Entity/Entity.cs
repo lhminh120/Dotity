@@ -171,7 +171,7 @@ namespace Dotity
         //Remove All Components
         public void RemoveAllComponents()
         {
-            for (int i = _components.Count; i >= 0; i++)
+            for (int i = _components.Count - 1; i >= 0; i--)
             {
                 Component.AddToReuseList((int)_components[i].Key, _components[i]);
                 _components.RemoveAt(i);
