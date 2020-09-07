@@ -18,7 +18,7 @@ namespace Dotity
         }
         public static void OnEntityRemoveComponent(IEntity entity)
         {
-            for (int i = 0, length = _groups.Count; i < length; i++)
+            for (int i = _groups.Count - 1; i >= 0; i--)
             {
                 if (!_groups[i].Match(entity))
                 {
