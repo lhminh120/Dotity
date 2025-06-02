@@ -28,9 +28,10 @@ public class CreateViewSystem : IInitializeSystem
 
         EntityPool.CreateEntity()
             .Init()
-            .AddComponent<GameObjectComponent>(new GameObjectComponent(obj))
-            .AddComponent<PositionComponent>(new PositionComponent(trans.position))
-            .AddComponent<TransformComponent>(new TransformComponent(trans))
-            .AddComponent<SpeedComponent>(new SpeedComponent(1));
+            .AddComponentWithoutNoti(new GameObjectComponent(obj))
+            .AddComponentWithoutNoti(new PositionComponent(trans.position))
+            .AddComponentWithoutNoti(new TransformComponent(trans))
+            .AddComponentWithoutNoti(new SpeedComponent(1))
+            .OnCompleteAddComponents();
     }
 }

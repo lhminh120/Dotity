@@ -8,11 +8,6 @@ namespace Dotity
         #region Function
         private Type[] _anyOf;
         private Type[] _noneOf;
-        //private Matcher(ComponentKey[] anyOf, ComponentKey[] noneOf)
-        //{
-        //    _anyOf = anyOf;
-        //    _noneOf = noneOf;
-        //}
         public Matcher AnyOf(params Type[] keys)
         {
             _anyOf = keys;
@@ -23,10 +18,6 @@ namespace Dotity
             _noneOf = keys;
             return this;
         }
-        //public void WithoutOf(params ComponentKey[] noneOf)
-        //{
-        //    _noneOf = noneOf;
-        //}
         public bool Equal(IMatcher matcher)
         {
             bool check;

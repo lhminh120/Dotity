@@ -25,17 +25,38 @@ namespace Dotity
             return ref ComponentPools.GetComponent<T>(_componentIndexes[typeof(T)]);
         }
 
-        public Entity AddComponent<T>(IComponent component) where T : struct, IComponent
+        public Entity AddComponent<T>(T component) where T : struct, IComponent
         {
-            _componentIndexes.Add(typeof(T), ComponentPools.AddComponent<T>(component));
+            _componentIndexes.Add(typeof(T), ComponentPools.AddComponent(component));
             _onComponentAdded?.Invoke(this);
             return this;
         }
-        public void RemoveComponent<T>() where T : struct, IComponent
+        public Entity AddComponentWithoutNoti<T>(T component) where T : struct, IComponent
+        {
+            _componentIndexes.Add(typeof(T), ComponentPools.AddComponent(component));
+            return this;
+        }
+        public void OnCompleteAddComponents()
+        {
+            _onComponentAdded?.Invoke(this);
+        }
+        public Entity RemoveComponent<T>() where T : struct, IComponent
         {
             var index = _componentIndexes[typeof(T)];
             _componentIndexes.Remove(typeof(T));
             ComponentPools.RemoveComponent<T>(index);
+            _onComponentRemoved?.Invoke(this);
+            return this;
+        }
+        public Entity RemoveComponentWithoutNoti<T>() where T : struct, IComponent
+        {
+            var index = _componentIndexes[typeof(T)];
+            _componentIndexes.Remove(typeof(T));
+            ComponentPools.RemoveComponent<T>(index);
+            return this;
+        }
+        public void OnCompleteRemoveComponents()
+        {
             _onComponentRemoved?.Invoke(this);
         }
 
@@ -62,22 +83,21 @@ namespace Dotity
         //Remove All Components
         public void RemoveAllComponents()
         {
-            var method = typeof(Entity).GetMethod("RemoveComponent");
-            foreach (Type type in _componentIndexes.Keys)
-            {
-                var generic = method.MakeGenericMethod(type);
-                generic.Invoke(this, null);
-            }
+            var keys = new List<Type>(_componentIndexes.Keys);
+            for (int i = 0, length = keys.Count; i < length; i++)
+                ComponentPools.RemoveComponent(keys[i], _componentIndexes[keys[i]]);
+            _componentIndexes.Clear();
+            _onComponentRemoved?.Invoke(this);
         }
 
-        public void RegisterCallBackAddedComponent(Action<Entity> onEntityComponetAdded)
+        public void RegisterCallBackAddedComponent(Action<Entity> onEntityComponentAdded)
         {
-            _onComponentAdded = onEntityComponetAdded;
+            _onComponentAdded = onEntityComponentAdded;
         }
 
-        public void RegisterCallBackRemovedComponent(Action<Entity> onEntityComponetRemoved)
+        public void RegisterCallBackRemovedComponent(Action<Entity> onEntityComponentRemoved)
         {
-            _onComponentRemoved = onEntityComponetRemoved;
+            _onComponentRemoved = onEntityComponentRemoved;
         }
 
         public void RemoveAllCallBack()
