@@ -50,7 +50,6 @@ namespace Dotity
                     _entities.Add(EntityPool.entities[i]);
                 }
             }
-            // UnityEngine.Debug.Log("group " + _entities.Count + " " + EntityPool.entities.Count);
         }
         public bool Equal(IMatcher matcher) => _matcher.Equal(matcher);
         public IMatcher GetMatcher() => _matcher;
@@ -64,10 +63,8 @@ namespace Dotity
             if (!_entities.Contains(entity))
             {
                 _entities.Add(entity);
-                // UnityEngine.Debug.Log("group (1)" + _entities.Count + " " + EntityPool.entities.Count);
                 return true;
             }
-            // UnityEngine.Debug.Log("group (2)" + _entities.Count + " " + EntityPool.entities.Count);
             return false;
         }
 
