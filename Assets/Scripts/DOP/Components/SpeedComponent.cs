@@ -10,6 +10,9 @@ public struct SpeedComponent : IComponent
     }
     public float _speed;
     private bool _hasChange;
+
+    public ComponentKey key => ComponentKey.Speed;
+
     public bool IsChanged() => _hasChange;
     public void HasChanged()
     {

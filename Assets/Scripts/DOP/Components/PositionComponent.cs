@@ -11,6 +11,9 @@ public struct PositionComponent : IComponent
     }
     public Vector3 _position;
     private bool _hasChange;
+
+    public ComponentKey key => ComponentKey.Position;
+
     public bool IsChanged() => _hasChange;
     public void HasChanged()
     {

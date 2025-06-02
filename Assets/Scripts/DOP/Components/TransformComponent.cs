@@ -11,6 +11,9 @@ public struct TransformComponent : IComponent
     }
     public Transform _transform;
     private bool _hasChange;
+
+    public ComponentKey key => ComponentKey.Transform;
+
     public bool IsChanged() => _hasChange;
     public void HasChanged()
     {

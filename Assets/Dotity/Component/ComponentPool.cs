@@ -4,27 +4,26 @@ namespace Dotity
 {
     public class ComponentPools
     {
-        private static Dictionary<Type, IComponentPool> _pools = new();
+        private static Dictionary<ComponentKey, IComponentPool> _pools = new();
         public static int AddComponent<T>(T component) where T : struct, IComponent
         {
-            var type = typeof(T);
-            if (_pools.TryGetValue(type, out var pool))
+            if (_pools.TryGetValue(component.key, out var pool))
                 return ((ComponentPool<T>)pool).AddComponent(component);
             pool = new ComponentPool<T>();
-            _pools.Add(type, pool);
+            _pools.Add(component.key, pool);
             return ((ComponentPool<T>)pool).AddComponent(component);
         }
-        public static ref T GetComponent<T>(int index) where T : struct, IComponent
+        public static ref T GetComponent<T>(ComponentKey key, int index) where T : struct, IComponent
         {
-            return ref ((ComponentPool<T>)_pools[typeof(T)]).GetComponent(index);
+            return ref ((ComponentPool<T>)_pools[key]).GetComponent(index);
         }
-        public static void RemoveComponent<T>(int index) where T : struct, IComponent
+        public static void RemoveComponent<T>(ComponentKey key, int index) where T : struct, IComponent
         {
-            _pools[typeof(T)].RemoveComponent(index);
+            _pools[key].RemoveComponent(index);
         }
-        public static void RemoveComponent(Type type, int index)
+        public static void RemoveComponent(ComponentKey key, int index)
         {
-            _pools[type].RemoveComponent(index);
+            _pools[key].RemoveComponent(index);
         }
     }
     public interface IComponentPool

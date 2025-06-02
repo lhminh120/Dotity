@@ -5,8 +5,8 @@ namespace Dotity
 {
     public interface IMatcher
     {
-        Type[] GetAnyOf();
-        Type[] GetNoneOf();
+        ComponentKey[] GetAnyOf();
+        ComponentKey[] GetNoneOf();
         bool Equal(IMatcher matcher);
         bool Match(Entity entity);
     }

@@ -9,50 +9,50 @@ namespace Dotity
 
         #endregion
         #region Function
-        private Dictionary<Type, int> _componentIndexes;
+        private Dictionary<ComponentKey, int> _componentIndexes;
         private bool _activeSelf;
 
         private Action<Entity> _onComponentAdded;
         private Action<Entity> _onComponentRemoved;
         public Entity Init()
         {
-            _componentIndexes = new Dictionary<Type, int>();
+            _componentIndexes = new Dictionary<ComponentKey, int>();
             return this;
         }
         public void SetActive(bool active) => _activeSelf = active;
-        public ref T GetComponent<T>() where T : struct, IComponent
+        public ref T GetComponent<T>(ComponentKey key) where T : struct, IComponent
         {
-            return ref ComponentPools.GetComponent<T>(_componentIndexes[typeof(T)]);
+            return ref ComponentPools.GetComponent<T>(key, _componentIndexes[key]);
         }
 
         public Entity AddComponent<T>(T component) where T : struct, IComponent
         {
-            _componentIndexes.Add(typeof(T), ComponentPools.AddComponent(component));
+            _componentIndexes.Add(component.key, ComponentPools.AddComponent(component));
             _onComponentAdded?.Invoke(this);
             return this;
         }
         public Entity AddComponentWithoutNoti<T>(T component) where T : struct, IComponent
         {
-            _componentIndexes.Add(typeof(T), ComponentPools.AddComponent(component));
+            _componentIndexes.Add(component.key, ComponentPools.AddComponent(component));
             return this;
         }
         public void OnCompleteAddComponents()
         {
             _onComponentAdded?.Invoke(this);
         }
-        public Entity RemoveComponent<T>() where T : struct, IComponent
+        public Entity RemoveComponent<T>(ComponentKey key) where T : struct, IComponent
         {
-            var index = _componentIndexes[typeof(T)];
-            _componentIndexes.Remove(typeof(T));
-            ComponentPools.RemoveComponent<T>(index);
+            var index = _componentIndexes[key];
+            _componentIndexes.Remove(key);
+            ComponentPools.RemoveComponent<T>(key, index);
             _onComponentRemoved?.Invoke(this);
             return this;
         }
-        public Entity RemoveComponentWithoutNoti<T>() where T : struct, IComponent
+        public Entity RemoveComponentWithoutNoti<T>(ComponentKey key) where T : struct, IComponent
         {
-            var index = _componentIndexes[typeof(T)];
-            _componentIndexes.Remove(typeof(T));
-            ComponentPools.RemoveComponent<T>(index);
+            var index = _componentIndexes[key];
+            _componentIndexes.Remove(key);
+            ComponentPools.RemoveComponent<T>(key, index);
             return this;
         }
         public void OnCompleteRemoveComponents()
@@ -60,19 +60,19 @@ namespace Dotity
             _onComponentRemoved?.Invoke(this);
         }
 
-        public bool HasComponent(Type type)
+        public bool HasComponent(ComponentKey key)
         {
-            if (_componentIndexes.TryGetValue(type, out var componentIndex))
+            if (_componentIndexes.TryGetValue(key, out var componentIndex))
             {
                 return true;
             }
             return false;
         }
-        public bool HasComponents(params Type[] types)
+        public bool HasComponents(params ComponentKey[] keys)
         {
-            for (int i = 0, length = types.Length; i < length; i++)
+            for (int i = 0, length = keys.Length; i < length; i++)
             {
-                if (!_componentIndexes.TryGetValue(types[i], out var componentIndex))
+                if (!_componentIndexes.TryGetValue(keys[i], out var componentIndex))
                 {
                     return false;
                 }
@@ -83,7 +83,7 @@ namespace Dotity
         //Remove All Components
         public void RemoveAllComponents()
         {
-            var keys = new List<Type>(_componentIndexes.Keys);
+            var keys = new List<ComponentKey>(_componentIndexes.Keys);
             for (int i = 0, length = keys.Count; i < length; i++)
                 ComponentPools.RemoveComponent(keys[i], _componentIndexes[keys[i]]);
             _componentIndexes.Clear();

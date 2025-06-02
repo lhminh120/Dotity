@@ -4,6 +4,9 @@ using Dotity;
 public struct SpriteComponent : IComponent
 {
     private bool _hasChange;
+
+    public ComponentKey key => ComponentKey.Sprite;
+
     public bool IsChanged() => _hasChange;
     public void HasChanged()
     {
