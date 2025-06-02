@@ -4,4 +4,5 @@ public enum ComponentKey
     Transform,
     Speed,
     Position,
+    Sprite,
 }

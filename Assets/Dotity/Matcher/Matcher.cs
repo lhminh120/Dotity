@@ -6,14 +6,14 @@ namespace Dotity
     public class Matcher : IMatcher
     {
         #region Function
-        private Type[] _anyOf;
-        private Type[] _noneOf;
-        public Matcher AnyOf(params Type[] keys)
+        private ComponentKey[] _anyOf;
+        private ComponentKey[] _noneOf;
+        public Matcher AnyOf(params ComponentKey[] keys)
         {
             _anyOf = keys;
             return this;
         }
-        public Matcher NoneOf(params Type[] keys)
+        public Matcher NoneOf(params ComponentKey[] keys)
         {
             _noneOf = keys;
             return this;
@@ -21,7 +21,7 @@ namespace Dotity
         public bool Equal(IMatcher matcher)
         {
             bool check;
-            Type[] anyOf = matcher.GetAnyOf();
+            ComponentKey[] anyOf = matcher.GetAnyOf();
             if (anyOf != null || _anyOf != null)
             {
                 if ((anyOf == null && _anyOf != null) || (anyOf != null && _anyOf == null)) return false;
@@ -41,7 +41,7 @@ namespace Dotity
                 }
             }
 
-            Type[] noneOf = matcher.GetNoneOf();
+            ComponentKey[] noneOf = matcher.GetNoneOf();
             if (noneOf != null || _noneOf != null)
             {
                 if ((noneOf == null && _noneOf != null) || (noneOf != null && _noneOf == null)) return false;
@@ -63,9 +63,9 @@ namespace Dotity
             return true;
         }
 
-        public Type[] GetAnyOf() => _anyOf;
+        public ComponentKey[] GetAnyOf() => _anyOf;
 
-        public Type[] GetNoneOf() => _noneOf;
+        public ComponentKey[] GetNoneOf() => _noneOf;
         public bool Match(Entity entity)
         {
             return (_anyOf == null || entity.HasComponents(_anyOf)) && (_noneOf == null || !entity.HasComponents(_noneOf));

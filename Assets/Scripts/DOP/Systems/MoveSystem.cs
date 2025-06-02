@@ -24,12 +24,12 @@ using Dotity;
 
 public class MoveSystem : ExecuteSystem
 {
-    public MoveSystem() : base(new Matcher().AnyOf(typeof(PositionComponent))) { }
+    public MoveSystem() : base(new Matcher().AnyOf(ComponentKey.Position)) { }
 
     public override void Execute(Entity entity)
     {
-        Move(ref entity.GetComponent<PositionComponent>(),
-                ref entity.GetComponent<SpeedComponent>());
+        Move(ref entity.GetComponent<PositionComponent>(ComponentKey.Position),
+                ref entity.GetComponent<SpeedComponent>(ComponentKey.Speed));
 
     }
 

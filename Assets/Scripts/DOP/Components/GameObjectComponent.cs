@@ -11,6 +11,9 @@ public struct GameObjectComponent : IComponent
     }
     public GameObject _obj;
     private bool _hasChange;
+
+    public ComponentKey key => ComponentKey.GameObject;
+
     public bool IsChanged() => _hasChange;
     public void HasChanged()
     {
