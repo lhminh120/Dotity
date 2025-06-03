@@ -4,26 +4,53 @@ namespace Dotity
 {
     public class ComponentPools
     {
-        private static Dictionary<ComponentKey, IComponentPool> _pools = new();
+        private struct ComponentPoolInfo
+        {
+            public ComponentKey key;
+            public IComponentPool pool;
+        }
+        private static List<ComponentPoolInfo> _pools = new();
         public static int AddComponent<T>(T component) where T : struct, IComponent
         {
-            if (_pools.TryGetValue(component.key, out var pool))
-                return ((ComponentPool<T>)pool).AddComponent(component);
-            pool = new ComponentPool<T>();
-            _pools.Add(component.key, pool);
-            return ((ComponentPool<T>)pool).AddComponent(component);
+            for (int i = 0, length = _pools.Count; i < length; i++)
+            {
+                if (_pools[i].key == component.key)
+                    return ((ComponentPool<T>)_pools[i].pool).AddComponent(component);
+            }
+            var pool = new ComponentPool<T>();
+            _pools.Add(
+                new ComponentPoolInfo()
+                {
+                    key = component.key,
+                    pool = pool,
+                }
+            );
+            return pool.AddComponent(component);
         }
         public static ref T GetComponent<T>(ComponentKey key, int index) where T : struct, IComponent
         {
-            return ref ((ComponentPool<T>)_pools[key]).GetComponent(index);
+            for (int i = 0, length = _pools.Count; i < length; i++)
+            {
+                if (_pools[i].key == key)
+                    return ref ((ComponentPool<T>)_pools[i].pool).GetComponent(index);
+            }
+            return ref ((ComponentPool<T>)_pools[0].pool).GetComponent(index); // this is not right thing, you should check HasComponent before using GetComponent
         }
         public static void RemoveComponent<T>(ComponentKey key, int index) where T : struct, IComponent
         {
-            _pools[key].RemoveComponent(index);
+            for (int i = 0, length = _pools.Count; i < length; i++)
+            {
+                if (_pools[i].key == key)
+                    _pools[i].pool.RemoveComponent(index);
+            }
         }
         public static void RemoveComponent(ComponentKey key, int index)
         {
-            _pools[key].RemoveComponent(index);
+            for (int i = 0, length = _pools.Count; i < length; i++)
+            {
+                if (_pools[i].key == key)
+                    _pools[i].pool.RemoveComponent(index);
+            }
         }
     }
     public interface IComponentPool
