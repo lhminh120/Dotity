@@ -9,7 +9,7 @@ public class GameManager : GameSystem
     {
         _systemManager
             .Add(new CreateViewSystem())
-            .Add(new MoveSystem())
-            .Add(new RenderTransformSystem());
+            .Add(new MoveSystem_V2())
+            .Add(new RenderTransformSystem_V2());
     }
 }

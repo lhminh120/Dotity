@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 namespace Dotity
 {
@@ -11,6 +12,8 @@ namespace Dotity
         bool Remove(IEntity entity);
         bool Add(IEntity entity);
         bool HasEntity(IEntity entity);
+        void RegisterOnEntityAdded(Action<IEntity> onEntityAdded);
+        void RegisterOnEntityRemoved(Action<IEntity> onEntityRemoved);
     }
 }
 

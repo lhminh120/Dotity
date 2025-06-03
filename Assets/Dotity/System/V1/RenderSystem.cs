@@ -3,13 +3,9 @@ using System.Collections.Generic;
 
 namespace Dotity
 {
-    public abstract class RenderSystem : IRenderSystem
+    public abstract class RenderSystem : BaseSystem, IRenderSystem
     {
-        protected IGroup _group;
-        public RenderSystem(IMatcher matcher)
-        {
-            _group = Group.CreateGroup(matcher);
-        }
+        public RenderSystem(IMatcher matcher) : base(matcher) { }
         public void Render()
         {
             List<IEntity> entities = _group.GetEntities();
@@ -19,7 +15,7 @@ namespace Dotity
                 {
                     Render(entities[i]);
                 }
-              
+
             }
         }
         public abstract void Render(IEntity entity);

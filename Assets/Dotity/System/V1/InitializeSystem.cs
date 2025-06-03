@@ -2,13 +2,9 @@
 
 namespace Dotity
 {
-    public abstract class InitializeSystem : IInitializeSystem
+    public abstract class InitializeSystem : BaseSystem, IInitializeSystem
     {
-        protected IGroup _group;
-        public InitializeSystem(IMatcher matcher)
-        {
-            _group = Group.CreateGroup(matcher);
-        }
+        public InitializeSystem(IMatcher matcher) : base(matcher) { }
         public void Initialize()
         {
             List<IEntity> entities = _group.GetEntities();

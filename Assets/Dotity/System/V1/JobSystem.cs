@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace Dotity
 {
-    public abstract class JobSystem : IExecuteSystem
+    public abstract class JobSystem : BaseSystem, IExecuteSystem
     {
-        protected IGroup _group;
         private readonly int _numberThread;
-        public JobSystem(int numberThread, IMatcher matcher)
+        public JobSystem(int numberThread, IMatcher matcher) : base(matcher)
         {
-            _group = Group.CreateGroup(matcher);
             _numberThread = numberThread;
         }
         public void Execute()

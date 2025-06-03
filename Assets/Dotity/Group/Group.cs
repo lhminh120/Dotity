@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Dotity
 {
@@ -40,6 +41,7 @@ namespace Dotity
         #region Function
         private readonly IMatcher _matcher;
         private readonly List<IEntity> _entities = new();
+        private Action<IEntity> _onEntityAdded, _onEntityRemoved;
         public Group(IMatcher matcher)
         {
             _matcher = matcher;
@@ -55,17 +57,32 @@ namespace Dotity
         public IMatcher GetMatcher() => _matcher;
         public List<IEntity> GetEntities() => _entities;
         public bool Match(IEntity entity) => _matcher.Match(entity);
-        public bool Remove(IEntity entity) => _entities.Remove(entity);
+        public bool Remove(IEntity entity)
+        {
+            var result = _entities.Remove(entity);
+            if (result)
+                _onEntityRemoved?.Invoke(entity);
+            return result;
+        }
         public bool Add(IEntity entity)
         {
             if (!_entities.Contains(entity))
             {
                 _entities.Add(entity);
+                _onEntityAdded?.Invoke(entity);
                 return true;
             }
             return false;
         }
         public bool HasEntity(IEntity entity) => _entities.Contains(entity);
+        public void RegisterOnEntityAdded(Action<IEntity> onEntityAdded)
+        {
+            _onEntityAdded = onEntityAdded;
+        }
+        public void RegisterOnEntityRemoved(Action<IEntity> onEntityRemoved)
+        {
+            _onEntityRemoved = onEntityRemoved;
+        }
         #endregion
     }
 }
