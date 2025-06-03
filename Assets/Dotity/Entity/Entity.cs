@@ -3,137 +3,148 @@ using System.Collections.Generic;
 
 namespace Dotity
 {
-    public struct Entity
+    public class Entity : IEntity
     {
-        private struct ComponentIndexInfo
+        #region Static Function
+        private static readonly Stack<IEntity> _entitiesReuse = new();
+        public static List<IEntity> _entities = new();
+        public static Entity CreateEntity()
         {
-            public ComponentKey key;
-            public int index;
+            Entity entity = _entitiesReuse.Count > 0 ? (Entity)_entitiesReuse.Pop() : new Entity();
+            entity.RegisterCallBackAddedComponent(Group.OnEntityAddComponent);
+            entity.RegisterCallBackRemovedComponent(Group.OnEntityRemoveComponent);
+            _entities.Add(entity);
+            return entity;
         }
-        private List<ComponentIndexInfo> _componentIndexes;
-        private bool _activeSelf;
+        public static void AddToReuseList(IEntity entity)
+        {
+            _entitiesReuse.Push(entity);
+        }
 
-        private Action<Entity> _onComponentAdded;
-        private Action<Entity> _onComponentRemoved;
-        public Entity Init()
+        /// <summary>
+        /// Entity Is Not Really Destroyed, It's Just Added To Reuse List
+        /// </summary>
+        /// <param name="entity"></param>
+        public static void DesTroyEntity(IEntity entity)
         {
-            _componentIndexes = new List<ComponentIndexInfo>();
-            return this;
+            entity.RemoveAllComponents();
+            entity.RemoveAllCallBack();
+            IEntity temp = entity;
+            AddToReuseList(temp);
+            entity = null;
         }
+        #endregion
+        #region Function
+        private readonly List<IComponent> _components = new List<IComponent>();
+        private bool _activeSelf = true;
+
+        private Action<IEntity> _onComponentAdded;
+        private Action<IEntity> _onComponentRemoved;
+
         public void SetActive(bool active) => _activeSelf = active;
-        public ref T GetComponent<T>(ComponentKey key) where T : struct, IComponent
+        public bool IsActive => _activeSelf;
+
+        /// <summary>
+        /// Get Component By The Giving Key
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="componentKey"></param>
+        /// <returns></returns>
+        public T GetComponent<T>(ComponentKey componentKey) where T : IComponent
         {
-            for (int i = 0, length = _componentIndexes.Count; i < length; i++)
+            for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_componentIndexes[i].key == key)
-                    return ref ComponentPools.GetComponent<T>(key, _componentIndexes[i].index);
+                if (_components[i].Key == componentKey) return (T)_components[i];
             }
-            return ref ComponentPools.GetComponent<T>(key, _componentIndexes[0].index); //this is not right thing, you should check HasComponent before using GetComponent
+            DebugClass.Log("There is no component suit with this key", DebugKey.Dotity);
+            return default;
         }
 
-        public Entity AddComponent<T>(T component) where T : struct, IComponent
+        /// <summary>
+        /// Add Component By The Giving Key
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public IEntity AddComponent(IComponent component)
         {
-            _componentIndexes.Add(
-                new ComponentIndexInfo()
-                {
-                    key = component.key,
-                    index = ComponentPools.AddComponent(component)
-                });
+            if (HasComponent(component.Key))
+                return this;
+            _components.Add(component);
             _onComponentAdded?.Invoke(this);
             return this;
         }
-        public Entity AddComponentWithoutNoti<T>(T component) where T : struct, IComponent
+        /// <summary>
+        /// Add Component By The Giving Key
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public IEntity AddComponents(params IComponent[] components)
         {
-            _componentIndexes.Add(
-                new ComponentIndexInfo()
-                {
-                    key = component.key,
-                    index = ComponentPools.AddComponent(component)
-                });
-            return this;
-        }
-        public void OnCompleteAddComponents()
-        {
-            _onComponentAdded?.Invoke(this);
-        }
-        public Entity RemoveComponent<T>(ComponentKey key) where T : struct, IComponent
-        {
-            for (int i = 0, length = _componentIndexes.Count; i < length; i++)
+            for (int i = 0, length = components.Length; i < length; i++)
             {
-                if (_componentIndexes[i].key == key)
+                if (!HasComponent(components[i].Key))
+                    _components.Add(components[i]);
+            }
+            _onComponentAdded?.Invoke(this);
+            return this;
+        }
+
+        /// <summary>
+        /// Remove Component By The Giving Key, Component Not Really Being Removed, It's Just Pushed Into Stack Reuse And Save For Later
+        /// </summary>
+        /// <param name="componentKey"></param>
+        public void RemoveComponent(ComponentKey componentKey)
+        {
+            for (int i = 0, length = _components.Count; i < length; i++)
+            {
+                if (_components[i].Key == componentKey)
                 {
-                    var index = _componentIndexes[i].index;
-                    _componentIndexes.RemoveAt(i);
-                    ComponentPools.RemoveComponent<T>(key, index);
+                    Component.AddToReuseList(componentKey, _components[i]);
+                    _components.RemoveAt(i);
                     _onComponentRemoved?.Invoke(this);
-                    return this;
+                    return;
                 }
             }
-            return this;
-        }
-        public Entity RemoveComponentWithoutNoti<T>(ComponentKey key) where T : struct, IComponent
-        {
-            for (int i = 0, length = _componentIndexes.Count; i < length; i++)
-            {
-                if (_componentIndexes[i].key == key)
-                {
-                    var index = _componentIndexes[i].index;
-                    _componentIndexes.RemoveAt(i);
-                    ComponentPools.RemoveComponent<T>(key, index);
-                    return this;
-                }
-            }
-            return this;
-        }
-        public void OnCompleteRemoveComponents()
-        {
-            _onComponentRemoved?.Invoke(this);
+            DebugClass.Log("There is no component suit with this key", DebugKey.Dotity);
         }
 
-        public bool HasComponent(ComponentKey key)
+        public bool HasComponent(ComponentKey componentKey)
         {
-            for (int i = 0, length = _componentIndexes.Count; i < length; i++)
+            for (int i = 0, length = _components.Count; i < length; i++)
             {
-                if (_componentIndexes[i].key == key)
-                {
-                    return true;
-                }
+                if (_components[i].Key == componentKey) return true;
             }
             return false;
         }
-        public bool HasComponents(params ComponentKey[] keys)
+        public bool HasComponents(ComponentKey[] componentKeys)
         {
-            for (int i = 0, length = keys.Length; i < length; i++)
+            for (int i = 0, length = componentKeys.Length; i < length; i++)
             {
-                bool check = false;
-                for (int j = 0, count = _componentIndexes.Count; j < count; j++)
-                {
-                    if (_componentIndexes[j].key == keys[i])
-                    {
-                        check = true;
-                        break;
-                    }
-                }
-                if (!check) return false;
+                if (!HasComponent(componentKeys[i])) return false;
             }
             return true;
         }
 
-        //Remove All Components
+
+        /// <summary>
+        /// Remove All Components 
+        /// </summary>
         public void RemoveAllComponents()
         {
-            for (int i = 0, length = _componentIndexes.Count; i < length; i++)
-                ComponentPools.RemoveComponent(_componentIndexes[i].key, _componentIndexes[i].index);
-            _componentIndexes.Clear();
-            _onComponentRemoved?.Invoke(this);
+            for (int i = _components.Count - 1; i >= 0; i--)
+            {
+                Component.AddToReuseList(_components[i].Key, _components[i]);
+                _components.RemoveAt(i);
+                _onComponentRemoved?.Invoke(this);
+            }
         }
 
-        public void RegisterCallBackAddedComponent(Action<Entity> onEntityComponentAdded)
+        public void RegisterCallBackAddedComponent(Action<IEntity> onEntityComponentAdded)
         {
             _onComponentAdded = onEntityComponentAdded;
         }
 
-        public void RegisterCallBackRemovedComponent(Action<Entity> onEntityComponentRemoved)
+        public void RegisterCallBackRemovedComponent(Action<IEntity> onEntityComponentRemoved)
         {
             _onComponentRemoved = onEntityComponentRemoved;
         }
@@ -143,6 +154,7 @@ namespace Dotity
             _onComponentAdded = null;
             _onComponentRemoved = null;
         }
+        #endregion
     }
 }
 

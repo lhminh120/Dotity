@@ -2,7 +2,7 @@
 {
     public interface UniqueComponent
     {
-        void HasChanged();
+        void HasChange();
     }
 }
 

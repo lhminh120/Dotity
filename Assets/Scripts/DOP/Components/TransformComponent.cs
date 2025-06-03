@@ -1,23 +1,19 @@
 ﻿
-using Dotity;
 using UnityEngine;
 
-public struct TransformComponent : IComponent
+public class TransformComponent : Dotity.Component
 {
+    public Transform transform;
+    private ComponentKey _key = ComponentKey.Transform;
+    public TransformComponent() { }
     public TransformComponent(Transform transform)
     {
-        _transform = transform;
-        _hasChange = false;
+        this.transform = transform;
     }
-    public Transform _transform;
-    private bool _hasChange;
-
-    public ComponentKey key => ComponentKey.Transform;
-
-    public bool IsChanged() => _hasChange;
-    public void HasChanged()
+    public TransformComponent Init(Transform transform)
     {
-        if (!_hasChange) _hasChange = true;
+        this.transform = transform;
+        return this;
     }
-    public void FinishChanged() => _hasChange = false;
+    public override ComponentKey Key => _key;
 }

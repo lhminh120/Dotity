@@ -1,22 +1,19 @@
 ﻿
 using Dotity;
 
-public struct SpeedComponent : IComponent
+public class SpeedComponent : Component
 {
+    public float speed;
+    private ComponentKey _key = ComponentKey.Speed;
+    public SpeedComponent() { }
     public SpeedComponent(float speed)
     {
-        _speed = speed;
-        _hasChange = false;
+        this.speed = speed;
     }
-    public float _speed;
-    private bool _hasChange;
-
-    public ComponentKey key => ComponentKey.Speed;
-
-    public bool IsChanged() => _hasChange;
-    public void HasChanged()
+    public SpeedComponent Init(float speed)
     {
-        if (!_hasChange) _hasChange = true;
+        this.speed = speed;
+        return this;
     }
-    public void FinishChanged() => _hasChange = false;
+    public override ComponentKey Key => _key;
 }

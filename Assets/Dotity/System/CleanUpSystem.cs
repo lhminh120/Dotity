@@ -11,18 +11,18 @@ namespace Dotity
         }
         public void CleanUp()
         {
-            List<Entity> entities = _group.GetEntities();
+            List<IEntity> entities = _group.GetEntities();
             for (int i = 0, length = entities.Count; i < length; i++)
             {
                 if (CleanUpCondition(entities[i]))
                 {
                     CleanUp(entities[i]);
                 }
-
+                
             }
         }
-        public abstract void CleanUp(Entity entity);
-        public abstract bool CleanUpCondition(Entity entity);
+        public abstract void CleanUp(IEntity entity);
+        public abstract bool CleanUpCondition(IEntity entity);
     }
 }
 

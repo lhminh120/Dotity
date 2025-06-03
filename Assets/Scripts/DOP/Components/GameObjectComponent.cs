@@ -1,24 +1,22 @@
 ﻿
-using Dotity;
 using UnityEngine;
 
-public struct GameObjectComponent : IComponent
+public class GameObjectComponent : Dotity.Component
 {
-    public GameObjectComponent(GameObject gameObject)
-    {
-        _obj = gameObject;
-        _hasChange = false;
-    }
-    public GameObject _obj;
-    private bool _hasChange;
+    public GameObject obj;
+    private ComponentKey _key = ComponentKey.GameObject;
 
-    public ComponentKey key => ComponentKey.GameObject;
-
-    public bool IsChanged() => _hasChange;
-    public void HasChanged()
+    public GameObjectComponent() { }
+    public GameObjectComponent(GameObject obj)
     {
-        if (!_hasChange) _hasChange = true;
+        this.obj = obj;
     }
-    public void FinishChanged() => _hasChange = false;
+    public GameObjectComponent Init(GameObject obj)
+    {
+        this.obj = obj;
+        return this;
+    }
+
+    public override ComponentKey Key => _key;
 
 }

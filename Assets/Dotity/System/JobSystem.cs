@@ -14,7 +14,7 @@ namespace Dotity
         }
         public void Execute()
         {
-            List<Entity> entities = _group.GetEntities();
+            List<IEntity> entities = _group.GetEntities();
 
             int count = entities.Count;
             if (count <= _numberThread)
@@ -63,22 +63,11 @@ namespace Dotity
                 Task.WaitAll(tasks);
             }
 
-
-            //DebugClass.Log("_numberThread " + _numberThread);
-            //DebugClass.Log("numberCount " + numberCount);
-            //for (int i = 0; i < _numberThread; i++)
-            //{
-            //    DebugClass.Log("i " + i + " from " + (i * numberCount) + " to " + ((i + 1) * numberCount));
-            //}
-
         }
-        private void LoopAllEntities(int from, int to, List<Entity> entities)
+        private void LoopAllEntities(int from, int to, List<IEntity> entities)
         {
-            //DebugClass.Log("from " + from + " to " + to + " count " + entities.Count);
             for (int i = from; i < to; i++)
             {
-                //if(i < 0 || i >= entities.Count)
-                //    DebugClass.Log("count " + entities.Count + " i " + i);
                 if (JobExecuteCondition(entities[i]))
                 {
                     JobExecute(entities[i]);
@@ -86,8 +75,8 @@ namespace Dotity
 
             }
         }
-        public abstract void JobExecute(Entity entity);
-        public abstract bool JobExecuteCondition(Entity entity);
+        public abstract void JobExecute(IEntity entity);
+        public abstract bool JobExecuteCondition(IEntity entity);
     }
 }
 

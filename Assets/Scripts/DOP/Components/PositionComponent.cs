@@ -1,23 +1,19 @@
 ﻿
-using Dotity;
 using UnityEngine;
 
-public struct PositionComponent : IComponent
+public class PositionComponent : Dotity.Component
 {
+    public Vector3 position;
+    private ComponentKey _key = ComponentKey.Position;
+    public PositionComponent() { }
     public PositionComponent(Vector3 position)
     {
-        _position = position;
-        _hasChange = false;
+        this.position = position;
     }
-    public Vector3 _position;
-    private bool _hasChange;
-
-    public ComponentKey key => ComponentKey.Position;
-
-    public bool IsChanged() => _hasChange;
-    public void HasChanged()
+    public PositionComponent Init(Vector3 position)
     {
-        if (!_hasChange) _hasChange = true;
+        this.position = position;
+        return this;
     }
-    public void FinishChanged() => _hasChange = false;
+    public override ComponentKey Key => _key;
 }

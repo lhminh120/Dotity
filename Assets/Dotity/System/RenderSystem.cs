@@ -12,18 +12,18 @@ namespace Dotity
         }
         public void Render()
         {
-            List<Entity> entities = _group.GetEntities();
+            List<IEntity> entities = _group.GetEntities();
             for (int i = 0, length = entities.Count; i < length; i++)
             {
                 if (RenderCondition(entities[i]))
                 {
                     Render(entities[i]);
                 }
-
+              
             }
         }
-        public abstract void Render(Entity entity);
-        public abstract bool RenderCondition(Entity entity);
+        public abstract void Render(IEntity entity);
+        public abstract bool RenderCondition(IEntity entity);
     }
 }
 
