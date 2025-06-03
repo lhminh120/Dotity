@@ -1,8 +1,8 @@
-public enum ComponentKey
+﻿public enum ComponentKey : int
 {
+    Position = 0,
+    Speed,
     GameObject,
     Transform,
-    Speed,
-    Position,
-    Sprite,
+    Sprite
 }

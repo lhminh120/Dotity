@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace Dotity
 {
     public class Matcher : IMatcher
@@ -64,9 +62,8 @@ namespace Dotity
         }
 
         public ComponentKey[] GetAnyOf() => _anyOf;
-
         public ComponentKey[] GetNoneOf() => _noneOf;
-        public bool Match(Entity entity)
+        public bool Match(IEntity entity)
         {
             return (_anyOf == null || entity.HasComponents(_anyOf)) && (_noneOf == null || !entity.HasComponents(_noneOf));
         }

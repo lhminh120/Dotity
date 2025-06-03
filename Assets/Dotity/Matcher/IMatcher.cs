@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace Dotity
 {
     public interface IMatcher
@@ -8,7 +6,7 @@ namespace Dotity
         ComponentKey[] GetAnyOf();
         ComponentKey[] GetNoneOf();
         bool Equal(IMatcher matcher);
-        bool Match(Entity entity);
+        bool Match(IEntity entity);
     }
 }
 

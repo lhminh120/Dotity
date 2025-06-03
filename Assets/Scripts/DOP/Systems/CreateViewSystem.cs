@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Dotity;
+﻿using Dotity;
 using UnityEngine;
 
 public class CreateViewSystem : IInitializeSystem
@@ -15,15 +13,14 @@ public class CreateViewSystem : IInitializeSystem
     }
     private void CreateEntity()
     {
-        GameObject obj = GameData.Instance.CreateObject();
+        GameObject obj = Singleton<GameData>.Instance.CreateObject();
         Transform trans = obj.transform;
 
-        EntityPool.CreateEntity()
-            .Init()
-            .AddComponentWithoutNoti(new GameObjectComponent(obj))
-            .AddComponentWithoutNoti(new PositionComponent(trans.position))
-            .AddComponentWithoutNoti(new TransformComponent(trans))
-            .AddComponentWithoutNoti(new SpeedComponent(1))
-            .OnCompleteAddComponents();
+        Entity.CreateEntity()
+            .AddComponents(
+                Dotity.Component.Create<GameObjectComponent>(ComponentKey.GameObject).Init(obj),
+                Dotity.Component.Create<PositionComponent>(ComponentKey.Position).Init(trans.position),
+                Dotity.Component.Create<TransformComponent>(ComponentKey.Transform).Init(trans),
+                Dotity.Component.Create<SpeedComponent>(ComponentKey.Speed).Init(1));
     }
 }

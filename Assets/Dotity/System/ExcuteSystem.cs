@@ -11,7 +11,7 @@ namespace Dotity
         }
         public void Execute()
         {
-            List<Entity> entities = _group.GetEntities();
+            List<IEntity> entities = _group.GetEntities();
             for (int i = 0, length = entities.Count; i < length; i++)
             {
                 if (ExecuteCondition(entities[i]))
@@ -21,8 +21,8 @@ namespace Dotity
 
             }
         }
-        public abstract void Execute(Entity entity);
-        public abstract bool ExecuteCondition(Entity entity);
+        public abstract void Execute(IEntity entity);
+        public abstract bool ExecuteCondition(IEntity entity);
     }
 }
 

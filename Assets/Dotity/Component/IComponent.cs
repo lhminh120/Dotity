@@ -2,10 +2,10 @@
 {
     public interface IComponent
     {
-        ComponentKey key { get; }
-        bool IsChanged();
-        void HasChanged();
-        void FinishChanged();
+        bool IsChange();
+        void HasChange();
+        void FinishChange();
+        ComponentKey Key { get; }
     }
 }
 

@@ -1,29 +1,28 @@
-﻿using System.Diagnostics;
-using Dotity;
+﻿using Dotity;
 
 public class MoveSystem : ExecuteSystem
 {
     public MoveSystem() : base(new Matcher().AnyOf(ComponentKey.Position)) { }
 
-    public override void Execute(Entity entity)
+    public override void Execute(IEntity entity)
     {
-        Move(ref entity.GetComponent<PositionComponent>(ComponentKey.Position),
-                ref entity.GetComponent<SpeedComponent>(ComponentKey.Speed));
+        Move(entity.GetComponent<PositionComponent>(ComponentKey.Position),
+                entity.GetComponent<SpeedComponent>(ComponentKey.Speed));
 
     }
 
-    public override bool ExecuteCondition(Entity entity)
+    public override bool ExecuteCondition(IEntity entity)
     {
         return true;
     }
 
-    private void Move(ref PositionComponent position, ref SpeedComponent speed)
+    private void Move(PositionComponent position, SpeedComponent speed)
     {
-        position._position.y += speed._speed * GameSystem._tick;
-        if (position._position.y > 5)
+        position.position.y += speed.speed * GameSystem._tick;// Time.deltaTime;
+        if (position.position.y > 5)
         {
-            position._position.y = -5;
+            position.position.y = -5;
         }
-        position.HasChanged();
+        position.HasChange();
     }
 }
