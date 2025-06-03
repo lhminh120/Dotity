@@ -2,13 +2,9 @@
 
 namespace Dotity
 {
-    public abstract class CleanUpSystem : ICleanUpSystem
+    public abstract class CleanUpSystem : BaseSystem, ICleanUpSystem
     {
-        protected IGroup _group;
-        public CleanUpSystem(IMatcher matcher)
-        {
-            _group = Group.CreateGroup(matcher);
-        }
+        public CleanUpSystem(IMatcher matcher) : base(matcher) { }
         public void CleanUp()
         {
             List<IEntity> entities = _group.GetEntities();
@@ -18,7 +14,7 @@ namespace Dotity
                 {
                     CleanUp(entities[i]);
                 }
-                
+
             }
         }
         public abstract void CleanUp(IEntity entity);

@@ -4,6 +4,7 @@ namespace Dotity
 {
     public interface IEntity
     {
+        int Id { get; set; }
         void RegisterCallBackAddedComponent(Action<IEntity> onEntityComponentAdded);
         void RegisterCallBackRemovedComponent(Action<IEntity> onEntityComponentRemoved);
         void RemoveAllCallBack();

@@ -10,10 +10,17 @@ namespace Dotity
         public static List<IEntity> _entities = new();
         public static Entity CreateEntity()
         {
-            Entity entity = _entitiesReuse.Count > 0 ? (Entity)_entitiesReuse.Pop() : new Entity();
+            Entity entity = null;
+            if (_entitiesReuse.Count > 0)
+                entity = (Entity)_entitiesReuse.Pop();
+            else
+            {
+                entity = new Entity();
+                entity.Id = _entities.Count;
+                _entities.Add(entity);
+            }
             entity.RegisterCallBackAddedComponent(Group.OnEntityAddComponent);
             entity.RegisterCallBackRemovedComponent(Group.OnEntityRemoveComponent);
-            _entities.Add(entity);
             return entity;
         }
         public static void AddToReuseList(IEntity entity)
@@ -31,7 +38,6 @@ namespace Dotity
             entity.RemoveAllCallBack();
             IEntity temp = entity;
             AddToReuseList(temp);
-            entity = null;
         }
         #endregion
         #region Function
@@ -43,6 +49,8 @@ namespace Dotity
 
         public void SetActive(bool active) => _activeSelf = active;
         public bool IsActive => _activeSelf;
+        private int _id;
+        public int Id { get => _id; set => _id = value; }
 
         /// <summary>
         /// Get Component By The Giving Key

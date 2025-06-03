@@ -2,13 +2,9 @@
 
 namespace Dotity
 {
-    public abstract class ExecuteSystem : IExecuteSystem
+    public abstract class ExecuteSystem : BaseSystem, IExecuteSystem
     {
-        protected IGroup _group;
-        public ExecuteSystem(IMatcher matcher)
-        {
-            _group = Group.CreateGroup(matcher);
-        }
+        public ExecuteSystem(IMatcher matcher) : base(matcher) { }
         public void Execute()
         {
             List<IEntity> entities = _group.GetEntities();
