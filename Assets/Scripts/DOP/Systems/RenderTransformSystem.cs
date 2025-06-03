@@ -18,8 +18,6 @@ public class RenderTransformSystem : RenderSystem
 
     private void RenderTransform(ref PositionComponent position, ref TransformComponent transform)
     {
-        // UnityEngine.Debug.Log("position (2) " + position._position);
-        //_vec.Set(position._position._x, position._position._y, position._position._z);
         transform._transform.position = position._position;
         position.FinishChanged();
     }
